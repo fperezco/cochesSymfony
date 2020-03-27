@@ -47,13 +47,11 @@ class MarcaController
         Environment $twig,
         MarcaService $marcaService,
         FormFactoryInterface $formFactory,
-        EntityManagerInterface $entityManager,
         RouterInterface $router
     ) {
         $this->twig = $twig;
         $this->marcaService = $marcaService;
         $this->formFactory = $formFactory;
-        $this->entityManager = $entityManager;
         $this->router = $router;
     }
 
@@ -85,33 +83,11 @@ class MarcaController
         $form->handleRequest($request);
 
 
-        try {
-            if ($form->isSubmitted() && $form->isValid()) {
-                //$this->entity->persist($Marca);
-                //$this->getDoctrine()->getManager()->persist($Marca);
-                $this->entityManager->persist($marca);
-                //$this->getDoctrine()->getManager()->flush();
-                $this->entityManager->flush();
-
-                //$this->addFlash('notice', 'post deleted');
-                /*$session = $request->getSession();
-                $session->getFlashBag()->add(
-                    'warning',
-                    'Cuidado! Un warning!'
-                );*/
-
-                // Añadir mensajes flash
-                $request->getSession()->getFlashBag()->add("success", "Marca " . $marca->getNombre() . " añadida");
-
-
-                //return $this->redirectToRoute('marca_index');
-                return new RedirectResponse($this->router->generate('marca_index'));
-            }
-        } catch (Exception $e) {
-            return new Response($e->getMessage());
-            //$form->addError(new FormError($e->getMessage()));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->marcaService->add($marca);
+            $request->getSession()->getFlashBag()->add("success", "Marca " . $marca->getNombre() . " añadida");
+            return new RedirectResponse($this->router->generate('marca_index'));
         }
-
 
         return new Response (
             $this->twig->render(
@@ -123,6 +99,19 @@ class MarcaController
 
 
     /**
+     * @Route("/marca/{marca}/delete",name="marca_delete")
+     * @param Marca $marca
+     * @return Response
+     */
+    public function delete(Request $request, Marca $marca)
+    {
+        $this->marcaService->delete($marca);
+        $request->getSession()->getFlashBag()->add("success", "Marca " . $marca->getNombre() . " eliminada");
+        return new RedirectResponse($this->router->generate('marca_index'));
+    }
+
+
+    /**
      * @Route("marca/test",name ="marca_test")
      */
     public function test()
@@ -130,13 +119,10 @@ class MarcaController
         try {
             $marca = new Marca();
             $marca->setNombre("fail");
-
         } catch (Exception $e) {
             return new Response($e->getMessage());
             //$form->addError(new FormError($e->getMessage()));
         }
-
-
     }
 
 }

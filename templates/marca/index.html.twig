@@ -2,7 +2,7 @@
 
 
 {% block body %}
-    {{  include('messages.html.twig') }}
+    {{ include('messages.html.twig') }}
 
     <a href="{{ path('marca_create') }}" class="btn btn-primary">Nuev@</a>
     <table class="table">
@@ -10,12 +10,48 @@
         <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         {% for marca in marcas %}
             <tr>
                 <td>{{ marca.id }}</td>
                 <td>{{ marca.nombre }}</td>
+                <td>Edit</td>
+                <td>
+                    <button class="btn btn-primary"
+                            onclick="deleteMarca('{{ marca.nombre }}','{{ path("marca_delete",{"marca":marca.id}) }}')"
+                    >Delete
+                    </button>
+                </td>
             </tr>
         {% endfor %}
     </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
+    <script>
+        function deleteMarca(name, urlSubmit) {
+            swal({
+                title: "Borrar Marca?",
+                text: "Borrar " + name + "?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = urlSubmit;
+                } else {
+                    //swal("Your imaginary file is safe!");
+                }
+            });
+
+        }
+
+    </script>
+
+
 {% endblock %}
