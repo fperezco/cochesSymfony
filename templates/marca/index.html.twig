@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {{  include('messages.html.twig') }}
+
+    <a href="{{ path('marca_create') }}" class="btn btn-primary">Nuev@</a>
+    <table class="table">
+        <caption>Marcas</caption>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+        </tr>
+        {% for marca in marcas %}
+            <tr>
+                <td>{{ marca.id }}</td>
+                <td>{{ marca.nombre }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
