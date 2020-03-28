@@ -70,8 +70,6 @@ class CocheType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Coche::class,
-                //'marcas' => null,
-                //'concesionarios' => null
             ]
         );
     }
@@ -97,19 +95,6 @@ class CocheType extends AbstractType
         $marca = $this->marcaRepository->find($data['marca']);
         $concesionario = $this->concesionarioRepository->find($data['concesionario']);
 
-        /*$form->add('marca', EntityType::class, array(
-            'required' => true,
-            'data' => $marca,
-            'placeholder' => 'Select a MarcaCity...',
-            'class' => Marca::class
-        ));
-
-        $form->add('modelo', EntityType::class, array(
-            'required' => true,
-            'placeholder' => 'Select a ModeloCity first ...',
-            'class' => Modelo::class,
-            'choices' => $modelo
-        ));*/
 
         $this->addElementMarcaModel($form, $marca);
         $this->addElementConcesionario($form, $concesionario);
@@ -117,7 +102,7 @@ class CocheType extends AbstractType
     }
 
     protected function addElementMarcaModel(FormInterface $form, Marca $marca = null) {
-        // 4. Add the province element
+        //Siempre existe una marca que puede venir o no a null
         $form->add('marca', EntityType::class, array(
             'required' => true,
             'data' => $marca,
@@ -127,16 +112,10 @@ class CocheType extends AbstractType
             'class' => Marca::class
         ));
 
-        /*
-                      'choices' => $options['concesionarios'],
-                    'choice_value' => 'id',
-                    'choice_label' => 'direccion',
-                    'placeholder' => 'Choose an option',
-*/
-        // Neighborhoods empty, unless there is a selected City (Edit View)
+        // Modelos vacio a menos que ya haya seleccionado una marca ( Edit View )
         $modelos = array();
 
-        // If there is a city stored in the Person entity, load the neighborhoods of it
+        // Si existe una marca => obtenemos los modelos asociados
         if ($marca) {
             // Fetch Neighborhoods of the City if there's a selected city
             $modelos = $marca->getModelos();

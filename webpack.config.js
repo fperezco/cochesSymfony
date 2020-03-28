@@ -24,8 +24,10 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     //.addEntry('app', './assets/js/app.js')
+    .addEntry('js/common', './assets/js/common.js')
     .addEntry('js/app',
         [
+            './assets/js/app.js',
             './node_modules/jquery/dist/jquery.min.js',
             './node_modules/popper.js/dist/popper.min.js',
             './node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -38,6 +40,7 @@ Encore
     //.addEntry('page2', './assets/js/page2.js')
 
     .cleanupOutputBeforeBuild()
+    .autoProvidejQuery() //ojo para jquery
     .enableSourceMaps(!Encore.isProduction())
 
 ;
