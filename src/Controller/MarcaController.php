@@ -57,6 +57,9 @@ class MarcaController
      */
     public function index()
     {
+        $marca = new Marca();
+        $marca->setNombre("yea");
+
         $marcas = $this->marcaService->getAll();
         return new Response(
             $this->twig->render(

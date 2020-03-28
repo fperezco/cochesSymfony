@@ -53,17 +53,7 @@ class CocheType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           /* ->add(
-                'concesionario',
-                ChoiceType::class,
-                [
-                    'choices' => $options['concesionarios'],
-                    'choice_value' => 'id',
-                    'choice_label' => 'direccion',
-                    'placeholder' => 'Choose an option',
-
-                ]
-            )*/
+            //->add concesionario marca y modelo dinamico
             ->add('anyo', DateType::class)
             ->add('matricula', TextType::class)
             ->add('precio', NumberType::class)
