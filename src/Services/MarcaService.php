@@ -34,8 +34,35 @@ class MarcaService
         $this->entityManager->flush();
     }
 
+    public function update($marca){
+        $this->entityManager->flush();
+    }
+
+
     public function delete(Marca $marca){
         $this->entityManager->remove($marca);
         $this->entityManager->flush();
+    }
+
+    public function findById($id){
+        return $this->marcaRepository->find($id);
+    }
+
+    /**
+     * Devuelve los modelos existentes para una marca seleccionada
+     * @param Marca $marca
+     */
+    public function getModelosFrom($marca){
+        $modelos = $marca->getModelos();
+
+        $responseArray = array();
+        foreach($modelos as $modelo){
+            $responseArray[] = array(
+                "id" => $modelo->getId(),
+                "nombre" => $modelo->getNombre()
+            );
+        }
+
+        return $responseArray;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConcesionarioRepository")
@@ -25,6 +26,7 @@ class Concesionario
 
     /**
      * @ORM\Column(type="string", length=9, nullable=true)
+     * @Assert\Length(max="9",maxMessage="Telefono debe contener 9 digitos")
      */
     private $telefono;
 

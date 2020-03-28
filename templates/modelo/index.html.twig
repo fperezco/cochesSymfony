@@ -4,26 +4,28 @@
 {% block body %}
     {{ include('messages.html.twig') }}
 
-    <a href="{{ path('marca_create') }}" class="btn btn-primary">Nuev@</a>
+    <a href="{{ path('modelo_create') }}" class="btn btn-primary">Nuev@</a>
     <table class="table">
-        <caption>Marcas</caption>
+        <caption>Modelos</caption>
         <tr>
             <th>ID</th>
-            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Modelo</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
-        {% for marca in marcas %}
+        {% for modelo in modelos %}
             <tr>
-                <td>{{ marca.id }}</td>
-                <td>{{ marca.nombre }}</td>
+                <td>{{ modelo.id }}</td>
+                <td>{{ modelo.marca.nombre }}</td>
+                <td>{{ modelo.nombre }}</td>
                 <td>
-                <a class="btn btn-primary"  href='{{ path("marca_edit",{"marca":marca.id}) }}'>Edit</a>
+                <a class="btn btn-primary"  href='{{ path("modelo_edit",{"modelo":modelo.id}) }}'>Edit</a>
                 </td>
                 <td>
                     <button
                             class="btn btn-primary"
-                            onclick="deleteConfirmation('{{ marca.nombre }}','{{ path("marca_delete",{"marca":marca.id}) }}')"
+                            onclick="deleteConfirmation('{{ modelo.nombre }}','{{ path("modelo_delete",{"modelo":modelo.id}) }}')"
                     >Delete
                     </button>
                 </td>

@@ -3,15 +3,12 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Marca;
 use App\Form\MarcaType;
-use App\Repository\MarcaRepository;
 use App\Services\MarcaService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,14 +75,35 @@ class MarcaController
     {
         $marca = new Marca();
 
-        //$form = $this->createForm(MicroPostType::class, $microPost);
         $form = $this->formFactory->create(MarcaType::class, $marca);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->marcaService->add($marca);
             $request->getSession()->getFlashBag()->add("success", "Marca " . $marca->getNombre() . " añadida");
+            return new RedirectResponse($this->router->generate('marca_index'));
+        }
+
+        return new Response (
+            $this->twig->render(
+                'marca/add.html.twig',
+                ['form' => $form->createView()]
+            )
+        );
+    }
+
+
+    /**
+     * @Route("/marcas/{marca}/edit",name="marca_edit")
+     */
+    public function edit(Request $request, Marca $marca)
+    {
+        $form = $this->formFactory->create(MarcaType::class, $marca);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->marcaService->update($marca);
+            $request->getSession()->getFlashBag()->add("success", "Marca " . $marca->getNombre() . " actualizada");
             return new RedirectResponse($this->router->generate('marca_index'));
         }
 
@@ -111,18 +129,25 @@ class MarcaController
     }
 
 
+//    /**
+//     * @Route("/marca/{marca}/modelos",name="marca_get_modelos")
+//     * @param Marca $marca
+//     */
+//    public function marcaGetModelos(Marca $marca){
+//
+//      $jsonArray = $this->marcaService->getModelosFrom($marca);
+//        return new JsonResponse($jsonArray);
+//    }
+
     /**
-     * @Route("marca/test",name ="marca_test")
+     * @Route("/marca/modelos",name="marca_get_modelos")
+     * @param Marca $marca
      */
-    public function test()
-    {
-        try {
-            $marca = new Marca();
-            $marca->setNombre("fail");
-        } catch (Exception $e) {
-            return new Response($e->getMessage());
-            //$form->addError(new FormError($e->getMessage()));
-        }
+    public function marcaGetModelos(Request $request){
+        $marcaId = $request->query->get('marcaid');
+        $marca = $this->marcaService->findById($marcaId);
+        $jsonArray = $this->marcaService->getModelosFrom($marca);
+        return new JsonResponse($jsonArray);
     }
 
 }

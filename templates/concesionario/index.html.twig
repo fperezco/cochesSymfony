@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {{ include('messages.html.twig') }}
+
+    <a href="{{ path('concesionario_create') }}" class="btn btn-primary">Nuev@</a>
+    <table class="table">
+        <caption>Concesionarios</caption>
+        <tr>
+            <th>ID</th>
+            <th>Direccion</th>
+            <th>Telefono</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {% for concesionario in concesionarios %}
+            <tr>
+                <td>{{ concesionario.id }}</td>
+                <td>{{ concesionario.direccion }}</td>
+                <td>{{ concesionario.telefono }}</td>
+                <td>
+                <a class="btn btn-primary"  href='{{ path("concesionario_edit",{"concesionario":concesionario.id}) }}'>Edit</a>
+                </td>
+                <td>
+                    <button
+                            class="btn btn-primary"
+                            onclick="deleteConfirmation('{{ concesionario.direccion }}','{{ path("concesionario_delete",{"concesionario":concesionario.id}) }}')"
+                    >Delete
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a Coche{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="md-6">
+            {{  form_start(form) }}
+
+            {{  form_widget(form) }}
+
+            {{  form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+
+    <script>
+        $('#coche_marca').change(function () {
+            alert("go");
+            var marcaSelector = $(this);
+
+            // Request the neighborhoods of the selected city.
+            $.ajax({
+                url: "{{ path('marca_get_modelos') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    marcaid: marcaSelector.val()
+                },
+                success: function (modelos) {
+                    var modeloSelect = $("#coche_modelo");
+
+                    console.log(modelos);
+                    // Remove current options
+                    modeloSelect.html('');
+
+                    // Empty value ...
+                    modeloSelect.append('<option value> Select a model of ' + marcaSelector.find("option:selected").text() + ' ...</option>');
+
+
+                    $.each(modelos, function (key, modelo) {
+                        modeloSelect.append('<option value="' + modelo.id + '">' + modelo.nombre + '</option>');
+                    });
+                },
+                error: function (err) {
+                    alert("An error ocurred while loading data ...");
+                }
+            });
+        });
+    </script>
+
+
+{% endblock %}
